@@ -5,6 +5,7 @@ import { RecorderService } from './recorder.service';
 import { ParserService } from 'src/parser/parser.service';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import * as k8s from '@kubernetes/client-node';
 
 @Controller('recorder')
 export class RecorderController {
@@ -27,6 +28,44 @@ export class RecorderController {
     await this.recorderService.createStream(randomString, 'title', 0, 'test');
 
     // 3. Create Kubernetes Job
+    const kc = new k8s.KubeConfig();
+    kc.loadFromDefault();
+
+    const k8sApi = kc.makeApiClient(k8s.BatchV1Api);
+
+    const jobManifest: k8s.V1Job = {
+      apiVersion: 'batch/v1',
+      kind: 'Job',
+      metadata: {
+        name: `yudarlinn-pipeline-${randomString}`,
+      },
+      spec: {
+        template: {
+          spec: {
+            containers: [
+              {
+                name: 'pipeline',
+                image: 'hyeonwoo5342/yudarlinn-pipeline:latest',
+                env: [
+                  {
+                    name: 'STREAM_ID',
+                    value: randomString,
+                  },
+                  {
+                    name: 'M3U8_URL',
+                    value: m3u8[0].url,
+                  },
+                ],
+              },
+            ],
+            restartPolicy: 'OnFailure',
+          },
+        },
+        ttlSecondsAfterFinished: 60 * 60 * 24, // automatically delete after 1 day
+      },
+    };
+
+    await k8sApi.createNamespacedJob('leaven', jobManifest);
 
     // // 3. start processing (add to queue)
     // await this.archiversQueue.add('recorder', {
