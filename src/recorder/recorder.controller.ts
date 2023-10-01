@@ -24,8 +24,8 @@ export class RecorderController {
     const m3u8 = await this.parserService.getM3u8(data.user_id);
 
     // 2. save it to stream table
-    const randomString = Math.random().toString(36).substr(2, 11);
-    await this.recorderService.createStream(randomString, 'title', 0, 'test');
+    const streamId = Math.random().toString(36).substr(2, 11);
+    await this.recorderService.createStream(streamId, 'title', 0, 'test');
 
     // 3. Create Kubernetes Job
     const kc = new k8s.KubeConfig();
@@ -37,7 +37,7 @@ export class RecorderController {
       apiVersion: 'batch/v1',
       kind: 'Job',
       metadata: {
-        name: `yudarlinn-pipeline-${randomString}`,
+        name: `yudarlinn-pipeline-${streamId}`,
       },
       spec: {
         template: {
@@ -49,13 +49,23 @@ export class RecorderController {
                 env: [
                   {
                     name: 'STREAM_ID',
-                    value: randomString,
+                    value: streamId,
                   },
                   {
                     name: 'M3U8_URL',
                     value: m3u8[0].url,
                   },
                 ],
+                resources: {
+                  requests: {
+                    memory: '300Mi',
+                    cpu: '100m',
+                  },
+                  limits: {
+                    memory: '300Mi',
+                    cpu: '100m',
+                  },
+                },
               },
             ],
             restartPolicy: 'OnFailure',
