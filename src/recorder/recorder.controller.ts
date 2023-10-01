@@ -56,6 +56,13 @@ export class RecorderController {
                     value: m3u8[0].url,
                   },
                 ],
+                envFrom: [
+                  {
+                    secretRef: {
+                      name: 'yudarlinn-secret',
+                    },
+                  },
+                ],
                 resources: {
                   requests: {
                     memory: '300Mi',
