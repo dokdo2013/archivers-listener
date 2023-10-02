@@ -42,6 +42,8 @@ export class RecorderController {
       spec: {
         template: {
           spec: {
+            serviceAccountName: 'yudarlinn-listener',
+            automountServiceAccountToken: true,
             containers: [
               {
                 name: 'pipeline',
