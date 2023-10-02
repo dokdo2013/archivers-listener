@@ -13,6 +13,10 @@ export class VideoController {
     example: 'a1b2c3d4e5',
   })
   async getVideo(@Param('stream_id') stream_id: string, @Res() res) {
+    if (stream_id.indexOf('.m3u8') !== -1) {
+      stream_id = stream_id.replace('.m3u8', '');
+    }
+
     // get stream id from request
     const stream = await this.videoService.getStream(stream_id);
     if (!stream) {
@@ -22,7 +26,7 @@ export class VideoController {
     const segments = await this.videoService.getSegments(stream_id);
 
     // generate m3u8 file from segments
-    const m3u8 = this.videoService.generateM3u8(segments, 2);
+    const m3u8 = this.videoService.generateM3u8(segments);
 
     // return m3u8 text to response
     // just return m3u8 text (don't use nestjs interceptors)
