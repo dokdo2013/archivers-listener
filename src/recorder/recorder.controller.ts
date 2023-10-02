@@ -75,6 +75,11 @@ export class RecorderController {
                 },
               },
             ],
+            imagePullSecrets: [
+              {
+                name: 'dockerhub-secret',
+              },
+            ],
             restartPolicy: 'OnFailure',
           },
         },

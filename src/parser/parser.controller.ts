@@ -11,7 +11,7 @@ export class ParserController {
   @Post('')
   async postClipper() {
     // m3u8 주소 획득
-    const m3u8 = await this.parserService.getM3u8('arahashitabi_stellive');
+    const m3u8 = await this.parserService.getM3u8('yudarlinn');
     const m3u8_url = m3u8[0] ? m3u8[0].url : '';
 
     // m3u8 내부 데이터 획득
