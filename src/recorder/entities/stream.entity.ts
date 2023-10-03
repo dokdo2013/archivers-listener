@@ -117,4 +117,10 @@ export class Stream extends Model<Stream> {
     comment: '삭제일시',
   })
   deletedAt: Date;
+
+  @Column({
+    field: 'thumbnail_url',
+    comment: '썸네일 URL',
+  })
+  thumbnailUrl: string;
 }
