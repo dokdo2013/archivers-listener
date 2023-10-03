@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
-import { YudarlinnSegment } from 'src/recorder/entities/yudarlinn-segment.entity';
-import { YudarlinnStream } from 'src/recorder/entities/yudarlinn-stream.entity';
+import { Segment } from 'src/recorder/entities/segment.entity';
+import { Stream } from 'src/recorder/entities/stream.entity';
 
 @Injectable()
 export class VideoService {
   constructor(
-    @InjectModel(YudarlinnStream)
-    private readonly yudarlinnStreamModel: typeof YudarlinnStream,
-    @InjectModel(YudarlinnSegment)
-    private readonly yudarlinnSegmentModel: typeof YudarlinnSegment,
+    @InjectModel(Stream)
+    private readonly streamModel: typeof Stream,
+    @InjectModel(Segment)
+    private readonly segmentModel: typeof Segment,
     private readonly sequelize: Sequelize,
   ) {
-    this.sequelize.addModels([YudarlinnStream, YudarlinnSegment]);
+    this.sequelize.addModels([Stream, Segment]);
   }
 
   async getStream(streamId: string) {
-    const res = await this.yudarlinnStreamModel.findOne({
+    const res = await this.streamModel.findOne({
       where: {
         streamId,
       },
@@ -27,20 +27,20 @@ export class VideoService {
   }
 
   async getSegments(streamId: string) {
-    const res = (await this.yudarlinnSegmentModel.findAll({
+    const res = (await this.segmentModel.findAll({
       where: {
         streamId,
       },
       order: [['created_at', 'ASC']],
       raw: true,
-    })) as YudarlinnSegment[];
+    })) as Segment[];
 
     // const segmentLinks = res.map((segment) => segment.link);
 
     return res;
   }
 
-  generateM3u8(segments: YudarlinnSegment[], type: 'live' | 'vod' = 'vod') {
+  generateM3u8(segments: Segment[], type: 'live' | 'vod' = 'vod') {
     let m3u8 = '#EXTM3U' + '\n';
     m3u8 += '#EXT-X-VERSION:3' + '\n';
     m3u8 += '#EXT-X-TARGETDURATION:2\n';

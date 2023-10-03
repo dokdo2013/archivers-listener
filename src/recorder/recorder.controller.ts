@@ -25,7 +25,7 @@ export class RecorderController {
 
     // 2. save it to stream table
     const streamId = Math.random().toString(36).substr(2, 11);
-    await this.recorderService.createStream(streamId, 'title', 0, 'test');
+    await this.recorderService.createStream(streamId, 'title');
 
     // 3. Create Kubernetes Job
     const kc = new k8s.KubeConfig();
@@ -45,7 +45,7 @@ export class RecorderController {
             serviceAccountName: 'archivers-listener',
             automountServiceAccountToken: true,
             nodeSelector: {
-              'vke.vultr.com/node-pool': 'archivers',
+              'vke.vultr.com/node-pool': 'archivers-sub',
             },
             containers: [
               {

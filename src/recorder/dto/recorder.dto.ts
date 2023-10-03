@@ -12,16 +12,4 @@ export class RecorderDto {
     example: 'test',
   })
   title: string;
-
-  @ApiProperty({
-    description: 'description',
-    example: 'test',
-  })
-  description: string;
-
-  @ApiProperty({
-    description: 'thumbnail',
-    example: 'test',
-  })
-  thumbnail: string;
 }

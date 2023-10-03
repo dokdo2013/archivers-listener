@@ -1,19 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { YudarlinnStream } from './entities/yudarlinn-stream.entity';
-import { YudarlinnSegment } from './entities/yudarlinn-segment.entity';
 import { Sequelize } from 'sequelize-typescript';
+import { Stream } from './entities/stream.entity';
+import { Streamer } from './entities/streamer.entity';
+import { Segment } from './entities/segment.entity';
 
 @Injectable()
 export class RecorderService {
   constructor(
-    @InjectModel(YudarlinnStream)
-    private readonly yudarlinnStreamModel: typeof YudarlinnStream,
-    @InjectModel(YudarlinnSegment)
-    private readonly yudarlinnSegmentModel: typeof YudarlinnSegment,
+    @InjectModel(Stream)
+    private readonly streamModel: typeof Stream,
+    @InjectModel(Streamer)
+    private readonly streamerModel: typeof Streamer,
+    @InjectModel(Segment)
+    private readonly segmentModel: typeof Segment,
     private readonly sequelize: Sequelize,
   ) {
-    this.sequelize.addModels([YudarlinnStream, YudarlinnSegment]);
+    this.sequelize.addModels([Stream, Segment, Streamer]);
   }
 
   /**
@@ -24,61 +27,35 @@ export class RecorderService {
    * @param categoryName 카테고리 이름
    * @returns {Promise<YudarlinnStream>} YudarlinnStream
    */
-  async createStream(
-    streamId: string,
-    title: string,
-    categoryId: number,
-    categoryName: string,
-  ) {
-    const res = await this.yudarlinnStreamModel.create({
+  async createStream(streamId: string, title: string) {
+    const res = await this.streamModel.create({
       streamId,
       title,
-      categoryId,
-      categoryName,
       isLive: true,
       startAt: new Date(),
+      m3u8Address: `https://archivers.app/media-api/video/stream/${streamId}.m3u8`,
+      storageProvider: 'r2',
     });
 
     return res;
   }
 
   /**
-   * Create segment
+   * End live stream
    * @param streamId 생방송 ID
-   * @param segmentId 세그먼트 ID
-   * @param link 세그먼트 링크
-   * @returns {Promise<YudarlinnSegment>} YudarlinnSegment
    */
-  async createSegment(
-    streamId: string,
-    segmentId: string,
-    duration: number,
-    segmentNumber: number,
-    link: string,
-  ) {
-    const res = await this.yudarlinnSegmentModel.create({
-      streamId,
-      segmentId,
-      segmentLength: duration,
-      segmentNumber,
-      link,
-    });
+  async endStream(streamId: string) {
+    const res = await this.streamModel.update(
+      {
+        isLive: false,
+      },
+      {
+        where: {
+          streamId,
+        },
+      },
+    );
 
     return res;
   }
-
-  // async getTsSegmentLength(link: string) {
-  //   let duration = 2.0;
-  //   ffmpeg.ffprobe(link, (err, metadata) => {
-  //     if (err) {
-  //       console.log(err);
-  //       return;
-  //     }
-
-  //     duration = metadata.format.duration;
-  //     console.log(duration);
-  //   });
-
-  //   return duration;
-  // }
 }

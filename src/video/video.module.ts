@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { YudarlinnSegment } from 'src/recorder/entities/yudarlinn-segment.entity';
-import { YudarlinnStream } from 'src/recorder/entities/yudarlinn-stream.entity';
+import { Segment } from 'src/recorder/entities/segment.entity';
+import { Stream } from 'src/recorder/entities/stream.entity';
 
 @Module({
-  imports: [SequelizeModule.forFeature([YudarlinnSegment, YudarlinnStream])],
+  imports: [SequelizeModule.forFeature([Segment, Stream])],
   controllers: [VideoController],
   providers: [VideoService],
 })

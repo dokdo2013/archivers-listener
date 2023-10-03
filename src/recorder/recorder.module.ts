@@ -2,15 +2,16 @@ import { Module } from '@nestjs/common';
 import { RecorderController } from './recorder.controller';
 import { RecorderService } from './recorder.service';
 import { ParserModule } from 'src/parser/parser.module';
-import { YudarlinnStream } from './entities/yudarlinn-stream.entity';
-import { YudarlinnSegment } from './entities/yudarlinn-segment.entity';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { BullModule } from '@nestjs/bull';
+import { Segment } from './entities/segment.entity';
+import { Stream } from './entities/stream.entity';
+import { Streamer } from './entities/streamer.entity';
 
 @Module({
   imports: [
     ParserModule,
-    SequelizeModule.forFeature([YudarlinnSegment, YudarlinnStream]),
+    SequelizeModule.forFeature([Segment, Stream, Streamer]),
     BullModule.registerQueue({
       name: 'archivers',
     }),
