@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { Segment } from 'src/recorder/entities/segment.entity';
 import { Stream } from 'src/recorder/entities/stream.entity';
