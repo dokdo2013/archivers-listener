@@ -45,7 +45,7 @@ export class RecorderController {
             serviceAccountName: 'archivers-listener',
             automountServiceAccountToken: true,
             nodeSelector: {
-              'vke.vultr.com/node-pool': 'archivers-sub',
+              'vke.vultr.com/node-pool': 'main-node-pool',
             },
             containers: [
               {
@@ -105,4 +105,11 @@ export class RecorderController {
       message: 'success',
     };
   }
+
+  // @Get('thumbnail/:stream_id')
+  // async getThumbnail(@Param('stream_id') stream_id: string) {
+  //   const res = await this.recorderService.saveThumbnail(stream_id);
+
+  //   return res;
+  // }
 }
