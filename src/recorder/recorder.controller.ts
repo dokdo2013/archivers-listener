@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { RecorderDto } from './dto/recorder.dto';
+import { RecorderDto, RecorderEndDto } from './dto/recorder.dto';
 import { ApiBody } from '@nestjs/swagger';
 import { RecorderService } from './recorder.service';
 import { ParserService } from 'src/parser/parser.service';
@@ -25,7 +25,7 @@ export class RecorderController {
 
     // 2. save it to stream table
     const streamId = Math.random().toString(36).substr(2, 11);
-    await this.recorderService.createStream(streamId, 'title');
+    await this.recorderService.createStream(streamId, data.title);
 
     // 3. Create Kubernetes Job
     const kc = new k8s.KubeConfig();
@@ -95,5 +95,14 @@ export class RecorderController {
     await k8sApi.createNamespacedJob('archivers', jobManifest);
 
     return m3u8;
+  }
+
+  @Post('end')
+  async postRecorderEnd(@Body() data: RecorderEndDto) {
+    await this.recorderService.endStream(data.user_id);
+
+    return {
+      message: 'success',
+    };
   }
 }

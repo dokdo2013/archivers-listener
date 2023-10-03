@@ -48,6 +48,7 @@ export class RecorderService {
     const res = await this.streamModel.update(
       {
         isLive: false,
+        endAt: new Date(),
       },
       {
         where: {

@@ -13,3 +13,11 @@ export class RecorderDto {
   })
   title: string;
 }
+
+export class RecorderEndDto {
+  @ApiProperty({
+    description: 'user_id',
+    example: 'arahashitabi_stellive',
+  })
+  user_id: string;
+}
