@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RecorderDto, RecorderEndDto } from './dto/recorder.dto';
 import { ApiBody } from '@nestjs/swagger';
 import { RecorderService } from './recorder.service';
@@ -106,10 +106,10 @@ export class RecorderController {
     };
   }
 
-  // @Get('thumbnail/:stream_id')
-  // async getThumbnail(@Param('stream_id') stream_id: string) {
-  //   const res = await this.recorderService.saveThumbnail(stream_id);
+  @Get('thumbnail/:stream_id')
+  async getThumbnail(@Param('stream_id') stream_id: string) {
+    const res = await this.recorderService.saveThumbnail(stream_id);
 
-  //   return res;
-  // }
+    return res;
+  }
 }

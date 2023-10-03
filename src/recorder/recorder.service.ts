@@ -53,7 +53,13 @@ export class RecorderService {
    * End live stream
    * @param streamId 생방송 ID
    */
-  async endStream(streamId: string) {
+  async endStream(streamerId: string) {
+    const user = await this.streamerModel.findOne({
+      where: {
+        twitchName: streamerId,
+      },
+    });
+
     const res = await this.streamModel.update(
       {
         isLive: false,
@@ -61,7 +67,7 @@ export class RecorderService {
       },
       {
         where: {
-          streamId,
+          streamerId: user.id,
         },
       },
     );
