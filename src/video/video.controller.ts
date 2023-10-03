@@ -26,7 +26,11 @@ export class VideoController {
     const segments = await this.videoService.getSegments(stream_id);
 
     // generate m3u8 file from segments
-    const m3u8 = this.videoService.generateM3u8(segments);
+    const isLive = await this.videoService.isLive(stream_id);
+    const m3u8 = await this.videoService.generateM3u8(
+      segments,
+      isLive ? 'live' : 'vod',
+    );
 
     // return m3u8 text to response
     // just return m3u8 text (don't use nestjs interceptors)

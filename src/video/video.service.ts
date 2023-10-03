@@ -40,7 +40,17 @@ export class VideoService {
     return res;
   }
 
-  generateM3u8(segments: Segment[], type: 'live' | 'vod' = 'vod') {
+  async isLive(streamId: string) {
+    const res = await this.streamModel.findOne({
+      where: {
+        streamId,
+      },
+    });
+
+    return res.isLive;
+  }
+
+  async generateM3u8(segments: Segment[], type: 'live' | 'vod' = 'vod') {
     let m3u8 = '#EXTM3U' + '\n';
     m3u8 += '#EXT-X-VERSION:3' + '\n';
     m3u8 += '#EXT-X-TARGETDURATION:2\n';
