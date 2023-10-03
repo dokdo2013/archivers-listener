@@ -32,7 +32,7 @@ export class RecorderService {
   async createStream(streamId: string, title: string, userId: string) {
     const user = await this.streamerModel.findOne({
       where: {
-        twitchId: userId,
+        twitchName: userId,
       },
     });
 
