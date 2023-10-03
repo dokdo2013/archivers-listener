@@ -25,7 +25,7 @@ export class RecorderController {
 
     // 2. save it to stream table
     const streamId = Math.random().toString(36).substr(2, 11);
-    await this.recorderService.createStream(streamId, data.title);
+    await this.recorderService.createStream(streamId, data.title, data.user_id);
 
     // 3. Create Kubernetes Job
     const kc = new k8s.KubeConfig();

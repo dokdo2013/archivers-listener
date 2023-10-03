@@ -26,11 +26,16 @@ export class RecorderService {
    * Create stream
    * @param streamId 생방송 ID
    * @param title 생방송 제목
-   * @param categoryId 카테고리 ID
-   * @param categoryName 카테고리 이름
+   * @param userId 유저 ID
    * @returns {Promise<YudarlinnStream>} YudarlinnStream
    */
-  async createStream(streamId: string, title: string) {
+  async createStream(streamId: string, title: string, userId: string) {
+    const user = await this.streamerModel.findOne({
+      where: {
+        twitchId: userId,
+      },
+    });
+
     const res = await this.streamModel.create({
       streamId,
       title,
@@ -38,6 +43,7 @@ export class RecorderService {
       startAt: new Date(),
       m3u8Address: `https://archivers.app/media-api/video/stream/${streamId}.m3u8`,
       storageProvider: 'r2',
+      streamerId: user.id,
     });
 
     return res;
