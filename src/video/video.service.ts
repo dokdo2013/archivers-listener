@@ -32,7 +32,7 @@ export class VideoService {
         streamId,
       },
       order: [['created_at', 'ASC']],
-      offset: 8,
+      // offset: 8, // offset is for skipping commercial break
       raw: true,
     })) as Segment[];
 
