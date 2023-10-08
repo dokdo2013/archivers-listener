@@ -20,6 +20,13 @@ export class RecorderController {
     type: RecorderDto,
   })
   async postRecorder(@Body() data: RecorderDto) {
+    // 임시 : Maintaining Mode
+    const isMaintainingMode = true;
+    if (isMaintainingMode) {
+      console.log(`Maintaining Mode: ${JSON.stringify(data)}`);
+      return null;
+    }
+
     // 1. get m3u8
     const m3u8 = await this.parserService.getM3u8(data.user_id);
 
