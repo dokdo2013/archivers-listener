@@ -31,7 +31,7 @@ export class VideoService {
       where: {
         streamId,
       },
-      order: [['created_at', 'ASC']],
+      order: [['segment_date', 'ASC']],
       // offset: 8, // offset is for skipping commercial break
       raw: true,
     })) as Segment[];
