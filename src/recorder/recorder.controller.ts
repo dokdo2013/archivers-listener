@@ -21,7 +21,7 @@ export class RecorderController {
   })
   async postRecorder(@Body() data: RecorderDto) {
     // 임시 : Maintaining Mode
-    const isMaintainingMode = true;
+    const isMaintainingMode = false;
     if (isMaintainingMode) {
       console.log(`Maintaining Mode: ${JSON.stringify(data)}`);
       return null;
