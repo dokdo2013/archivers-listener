@@ -9,6 +9,11 @@ import { ParserModule } from './parser/parser.module';
 import { RecorderModule } from './recorder/recorder.module';
 import { BullModule } from '@nestjs/bull';
 import { VideoModule } from './video/video.module';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { ExpressAdapter } from '@bull-board/express';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 @Module({
   imports: [
@@ -30,6 +35,10 @@ import { VideoModule } from './video/video.module';
         port: Number(process.env.REDIS_PORT),
         password: process.env.REDIS_PASSWORD || undefined,
       },
+    }),
+    BullBoardModule.forRoot({
+      route: '/bull',
+      adapter: ExpressAdapter, // Or FastifyAdapter from `@bull-board/fastify`
     }),
 
     TwitchModule,

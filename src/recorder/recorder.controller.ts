@@ -12,7 +12,7 @@ export class RecorderController {
   constructor(
     private readonly recorderService: RecorderService,
     private readonly parserService: ParserService,
-    @InjectQueue('archivers') private readonly archiversQueue: Queue,
+    @InjectQueue('worker') private readonly workerQueue: Queue,
   ) {}
 
   @Post('')
