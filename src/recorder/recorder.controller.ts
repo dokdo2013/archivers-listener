@@ -52,7 +52,7 @@ export class RecorderController {
             serviceAccountName: 'archivers-listener',
             automountServiceAccountToken: true,
             nodeSelector: {
-              'vke.vultr.com/node-pool': 'main-node-pool',
+              'vke.vultr.com/node-pool': 'archivers-pipeline',
             },
             containers: [
               {
