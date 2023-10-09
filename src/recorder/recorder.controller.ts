@@ -77,11 +77,11 @@ export class RecorderController {
                 ],
                 resources: {
                   requests: {
-                    memory: '150Mi',
+                    memory: '130Mi',
                     cpu: '60m',
                   },
                   limits: {
-                    memory: '150Mi',
+                    memory: '130Mi',
                     cpu: '60m',
                   },
                 },
