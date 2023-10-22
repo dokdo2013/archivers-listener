@@ -87,7 +87,7 @@ export class VideoService {
       return [];
     }
 
-    return continuousSegments.slice(0, 15);
+    return continuousSegments.slice(-15);
   }
 
   async isLive(streamId: string) {
@@ -100,11 +100,23 @@ export class VideoService {
     return res.isLive;
   }
 
-  async generateM3u8(segments: Segment[], type: 'live' | 'vod' = 'vod') {
+  async generateM3u8(
+    segments: Segment[],
+    type: 'live' | 'vod' | 'real-live' = 'vod',
+  ) {
     let m3u8 = '#EXTM3U' + '\n';
     m3u8 += '#EXT-X-VERSION:3' + '\n';
     m3u8 += '#EXT-X-TARGETDURATION:2\n';
-    m3u8 += '#EXT-X-MEDIA-SEQUENCE:0' + '\n';
+    if (type === 'real-live') {
+      const dateToUnixTimestamp = Math.round(
+        new Date(segments[0].segmentDate).getTime() / 2000,
+      );
+
+      m3u8 += `#EXT-X-MEDIA-SEQUENCE:${dateToUnixTimestamp}` + '\n';
+      // m3u8 += '#EXT-X-MEDIA-SEQUENCE:0' + '\n';
+    } else {
+      m3u8 += '#EXT-X-MEDIA-SEQUENCE:0' + '\n';
+    }
 
     if (type === 'vod') {
       m3u8 += '#EXT-X-PLAYLIST-TYPE:VOD' + '\n';
@@ -112,11 +124,15 @@ export class VideoService {
     m3u8 += '#EXT-X-ALLOW-CACHE:YES' + '\n';
 
     for (let i = 0; i < segments.length; i++) {
-      m3u8 += '#EXTINF:' + segments[i].segmentLength + ',\n';
+      if (type === 'real-live') {
+        m3u8 += '#EXTINF:' + segments[i].segmentLength + ',live' + '\n';
+      } else {
+        m3u8 += '#EXTINF:' + segments[i].segmentLength + ',\n';
+      }
       m3u8 += segments[i].link + '\n';
     }
 
-    if (type === 'live') {
+    if (type === 'live' || type === 'real-live') {
       m3u8 += '#EXT-X-DISCONTINUITY';
     } else {
       m3u8 += '#EXT-X-ENDLIST';

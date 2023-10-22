@@ -56,7 +56,7 @@ export class VideoController {
     }
 
     const segments = await this.videoService.getContinuousSegments(stream_id);
-    const m3u8 = await this.videoService.generateM3u8(segments, 'live');
+    const m3u8 = await this.videoService.generateM3u8(segments, 'real-live');
 
     // return m3u8 text to response
     // just return m3u8 text (don't use nestjs interceptors)
