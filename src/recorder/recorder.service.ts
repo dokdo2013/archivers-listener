@@ -44,6 +44,7 @@ export class RecorderService {
       m3u8Address: `https://archivers.app/media-api/video/stream/${streamId}.m3u8`,
       storageProvider: 'r2',
       streamerId: user.id,
+      spaceId: user.spaceId,
     });
 
     return res;

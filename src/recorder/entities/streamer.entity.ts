@@ -108,4 +108,10 @@ export class Streamer extends Model<Streamer> {
     comment: '생성자',
   })
   issuerId: number;
+
+  @Column({
+    field: 'space_id',
+    comment: 'Space ID',
+  })
+  spaceId: number;
 }

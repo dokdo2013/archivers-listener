@@ -123,4 +123,10 @@ export class Stream extends Model<Stream> {
     comment: '썸네일 URL',
   })
   thumbnailUrl: string;
+
+  @Column({
+    field: 'space_id',
+    comment: 'Space ID',
+  })
+  spaceId: number;
 }
